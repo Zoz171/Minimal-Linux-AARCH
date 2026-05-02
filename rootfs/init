@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# 1. Mount the virtual filesystems (Kernel talks to us here)
+mount -t proc none /proc
+mount -t sysfs none /sys
+
+# 2. Populate /dev (Create device nodes for console, null, etc.)
+# mdev is a mini-udev from busybox. -s scans /sys and creates /dev nodes.
+/sbin/mdev -s
+
+echo "------------------------------------------------"
+echo "   SYSTEM BOOT SUCCESSFUL: Welcome to CustomOS   "
+echo "------------------------------------------------"
+
+# 3. Drop into the shell
+# We use setsid cttyhack to ensure the shell controls the terminal properly
+exec /bin/sh
